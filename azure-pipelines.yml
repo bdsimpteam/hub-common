@@ -1,0 +1,35 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.8'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
+
+    RUN wget https://detect.synopsys.com/detect.sh && \
+    mkdir -p /opt/blackduck/ && \
+    mv detect.sh /opt/blackduck/ && \
+    chmod +x /opt/blackduck/detect.sh
+
+    RUN bash <(curl -s https://detect.synopsys.com/detect.sh) \
+    --blackduck.url=https://imp-docker07.dc1.lan \
+    --blackduck.username=sysadmin \
+    --blackduck.api.token=ZDY4M2NkYjMtNWJiYS00YzY5LWI0ZjgtZjI5NmU2ODNlMGFmOmMwOTUzZTlkLWJkZDYtNDQ4My05NTc2LTIxZGNkOGEzNjExOQ== \
+    --project.name=hub_common \
+    --project.version.name=1.0 \
+    --logging.level.com.synopsys.integration=TRACE
