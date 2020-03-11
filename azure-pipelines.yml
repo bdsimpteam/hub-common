@@ -21,11 +21,6 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
-    RUN wget https://detect.synopsys.com/detect.sh && \
-    mkdir -p /opt/blackduck/ && \
-    mv detect.sh /opt/blackduck/ && \
-    chmod +x /opt/blackduck/detect.sh
-
     RUN bash <(curl -s https://detect.synopsys.com/detect.sh) \
     --blackduck.url=https://imp-docker07.dc1.lan \
     --blackduck.username=sysadmin \
