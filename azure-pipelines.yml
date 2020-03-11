@@ -21,10 +21,14 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
-    RUN bash <(curl -s https://detect.synopsys.com/detect.sh) \
-    --blackduck.url=https://imp-docker07.dc1.lan \
-    --blackduck.username=sysadmin \
-    --blackduck.api.token=ZDY4M2NkYjMtNWJiYS00YzY5LWI0ZjgtZjI5NmU2ODNlMGFmOmMwOTUzZTlkLWJkZDYtNDQ4My05NTc2LTIxZGNkOGEzNjExOQ== \
-    --project.name=hub_common \
-    --project.version.name=1.0 \
-    --logging.level.com.synopsys.integration=TRACE
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: |
+      <(curl -s https://detect.synopsys.com/detect.sh) \
+          --blackduck.url=https://imp-docker07.dc1.lan \
+          --blackduck.username=sysadmin \
+          --blackduck.api.token=ZDY4M2NkYjMtNWJiYS00YzY5LWI0ZjgtZjI5NmU2ODNlMGFmOmMwOTUzZTlkLWJkZDYtNDQ4My05NTc2LTIxZGNkOGEzNjExOQ== \
+          --project.name=hub_common \
+          --project.version.name=1.0 \
+          --logging.level.com.synopsys.integration=TRACE
